@@ -2,9 +2,15 @@
 	"name": "@time-input-polyfill/utils",
 	"version": "1.0.4",
 	"description": "A library of helper functions designed to make the building of time input polyfill components easier.",
-	"main": "npm/index.js",
-	"jsdelivr": "npm/time-input-polyfill-utils.min.js",
-	"type": "module",
+	"main": "dist/cjs/index.js",
+	"module": "dist/mjs/index.js",
+	"jsdelivr": "dist/time-input-polyfill-utils.min.js",
+	"exports": {
+		".": {
+			"import": "./dist/mjs/index.js",
+			"require": "./dist/cjs/index.js"
+		}
+	},
 	"scripts": {
 		"start": "cypress open",
 		"test": "cypress run",
@@ -15,8 +21,8 @@
 		"cy:getters": "cypress run --spec \"cypress/integration/getters.test.ts\"",
 		"cy:modifiers": "cypress run --spec \"cypress/integration/modifiers.test.ts\"",
 		"cy:is": "cypress run --spec \"cypress/integration/is.test.ts\"",
-		"prepublishOnly": "npx rollup -c && npx tsc --project tsconfig.prepublish.json",
-		"postpublish": "rm -rf npm",
+		"prepublishOnly": "npx rollup -c && npx tsc -p tsconfig.prepublish.mjs.json && npx tsc -p tsconfig.prepublish.cjs.json && node ./packagingScript.js",
+		"postpublish": "rm -rf dist",
 		"testpublish": "npm run prepublish && npm run postpublish",
 		"pub": "npm publish --access public"
 	},
