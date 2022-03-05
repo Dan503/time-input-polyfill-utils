@@ -10,7 +10,7 @@
 			"import": "./dist/mjs/index.js",
 			"require": "./dist/cjs/index.js"
 		},
-		"./common": {
+		"./dist/mjs/common": {
 			"import": "./dist/mjs/common/index.js",
 			"require": "./dist/cjs/common/index.js"
 		}
