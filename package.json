@@ -13,6 +13,10 @@
 		"./dist/mjs/common": {
 			"import": "./dist/mjs/common/index.js",
 			"require": "./dist/cjs/common/index.js"
+		},
+		"./dist/time-input-polyfill-utils.min.js": {
+			"import": "./dist/time-input-polyfill-utils.min.js",
+			"require": "./dist/time-input-polyfill-utils.min.js"
 		}
 	},
 	"files": [
