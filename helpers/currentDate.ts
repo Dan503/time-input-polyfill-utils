@@ -1,4 +1,6 @@
-import { convertDateObject, convertHours24, isAmHrs24, toLeadingZero } from '../index'
+import { convertDateObject, convertHours24 } from '../core/convert/convert'
+import { isAmHrs24 } from '../core/is/is'
+import { toLeadingZero } from '../core/utils/utils'
 import { DefinedHour24, Mode, TimeObject } from '../types/index'
 
 export class CurrentDate {
