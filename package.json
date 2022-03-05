@@ -11,6 +11,9 @@
 			"require": "./dist/cjs/index.js"
 		}
 	},
+	"files": [
+		"/dist"
+	],
 	"scripts": {
 		"start": "cypress open",
 		"test": "cypress run",
