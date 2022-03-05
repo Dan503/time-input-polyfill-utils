@@ -1,0 +1,8 @@
+common
+core
+cypress
+helpers
+node_modules
+./*
+!./package.json
+!./LICENSE
