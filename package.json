@@ -23,6 +23,7 @@
 		"/dist",
 		"/LICENSE",
 		"/package.json",
+		"/universalValues.json",
 		"/README.md"
 	],
 	"scripts": {

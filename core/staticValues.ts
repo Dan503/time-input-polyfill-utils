@@ -1,4 +1,5 @@
 import { MaxAndMins, Ranges, Segment, SelectionRange, TimeObjectKey } from '../types/index'
+import universalValues from '../universalValues.json'
 
 export const ranges: Ranges = {
 	hrs12: { start: 0, end: 2, segment: 'hrs12' },
@@ -18,4 +19,5 @@ export const segments: Array<Segment> = ['hrs12', 'minutes', 'mode']
 
 export const timeObjectKeys: Array<TimeObjectKey> = ['hrs24', 'hrs12', 'minutes', 'mode']
 
-export const a11yID = 'time-input-polyfill-accessibility-block'
+// a11yID needs to be accessed by `@time-input-polyfill/tests` and the cjs/mjs split isn't working :(
+export const a11yID = universalValues.a11yID
