@@ -1,6 +1,6 @@
 {
 	"name": "@time-input-polyfill/utils",
-	"version": "2.0.0-beta.9",
+	"version": "2.0.0-beta.10",
 	"description": "A library of helper functions designed to make the building of time input polyfill components easier.",
 	"main": "dist/cjs/index.js",
 	"module": "dist/mjs/index.js",
@@ -17,7 +17,8 @@
 		"./dist/time-input-polyfill-utils.min.js": {
 			"import": "./dist/time-input-polyfill-utils.min.js",
 			"require": "./dist/time-input-polyfill-utils.min.js"
-		}
+		},
+		"./universalValues.json": "./universalValues.json"
 	},
 	"files": [
 		"/dist",
