@@ -39,7 +39,8 @@
 		"prepublishOnly": "npx rollup -c && npx tsc -p tsconfig.prepublish.mjs.json && npx tsc -p tsconfig.prepublish.cjs.json && node ./packagingScript.js",
 		"postpublish": "rm -rf dist",
 		"testpublish": "npm run prepublish && npm run postpublish",
-		"pub": "npm publish --access public"
+		"pub": "npm publish --access=public",
+		"pub-beta": "npm publish --access=public --tag beta"
 	},
 	"repository": {
 		"type": "git",
@@ -60,9 +61,9 @@
 		"url": "https://github.com/Dan503/time-input-polyfill-utils/issues"
 	},
 	"homepage": "https://github.com/Dan503/time-input-polyfill-utils#readme",
-	"dependencies": {},
 	"devDependencies": {
 		"@cypress/webpack-preprocessor": "^4.1.1",
+		"@rollup/plugin-json": "^4.1.0",
 		"@rollup/plugin-typescript": "^4.0.0",
 		"@typescript-eslint/eslint-plugin": "^2.25.0",
 		"@typescript-eslint/parser": "^2.25.0",
