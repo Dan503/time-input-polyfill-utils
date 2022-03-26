@@ -13,6 +13,7 @@ import cursorSegmentIncrement from './tests/increment/cursorSegment.increment.te
 import hoursIncrementTests from './tests/increment/hours.increment.test'
 import minutesIncrementTests from './tests/increment/minutes.increment.test'
 import walkThroughIncrementTest from './tests/increment/walkThrough.increment.test'
+import straightenTimeObjectTest from './tests/straightenTimeObject.test'
 import toggleModeTest from './tests/toggleMode.test'
 
 interface StringModifierTest {
@@ -119,3 +120,5 @@ describe('Walk through from blank tests', () => {
 	walkThroughIncrementTest()
 	walkThroughDecrementTest()
 })
+
+straightenTimeObjectTest()

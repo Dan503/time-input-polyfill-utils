@@ -141,3 +141,8 @@ export interface ModifyTimeObject {
 		toggleMode: (preferredModeWhenNull: GuaranteedMode, isIntegrated: boolean) => TimeObject
 	}
 }
+
+export type StraightenTimeObject = (
+	basedOn: 'hrs12' | 'hrs24',
+	invalidTimeObj: TimeObject,
+) => TimeObject

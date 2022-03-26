@@ -19,6 +19,7 @@ import {
 	ModifyString12hr,
 	ModifyString24hr,
 	ModifyTimeObject,
+	StraightenTimeObject,
 } from './modify.types'
 
 export const modifyString12hr: ModifyString12hr = (string12hr) => {
@@ -425,8 +426,10 @@ const nudgeTimeObjectHrs = <T extends 'hrs12' | 'hrs24'>({
 	}
 }
 
-const straightenTimeObject = (
+export const straightenTimeObject: StraightenTimeObject = (
+	/** Determine if the return time object should align with the `hrs12 (+ mode)` value or the `hrs24` value. */
 	basedOn: 'hrs12' | 'hrs24',
+	/** The invalid time object that you want to transform. */
 	invalidTimeObj: TimeObject,
 ): TimeObject => {
 	const { hrs24, hrs12, minutes } = invalidTimeObj
