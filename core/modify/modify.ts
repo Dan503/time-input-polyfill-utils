@@ -320,7 +320,7 @@ export const modifyTimeObject: ModifyTimeObject = (timeObject) => {
 				return returnVal
 			}
 
-			return straightenTimeObject('hrs24', returnVal)
+			return straightenTimeObject({ basedOn: 'hrs24', invalidTimeObject: returnVal })
 		},
 		clear: {
 			hrs24: (): TimeObject => ({ ...timeObject, hrs12: null, hrs24: null }),
@@ -420,21 +420,21 @@ const nudgeTimeObjectHrs = <T extends 'hrs12' | 'hrs24'>({
 		} else {
 			copiedObject[hrsType] = ((hrs as number) + modifier) as TimeObject[T]
 		}
-		return straightenTimeObject(hrsType, copiedObject)
+		return straightenTimeObject({ basedOn: hrsType, invalidTimeObject: copiedObject })
 	} else {
-		return blankCallback(straightenTimeObject(hrsType, copiedObject))
+		return blankCallback(
+			straightenTimeObject({ basedOn: hrsType, invalidTimeObject: copiedObject }),
+		)
 	}
 }
 
-export const straightenTimeObject: StraightenTimeObject = (
-	/** Determine if the return time object should align with the `hrs12 (+ mode)` value or the `hrs24` value. */
-	basedOn: 'hrs12' | 'hrs24',
-	/** The invalid time object that you want to transform. */
-	invalidTimeObj: TimeObject,
-): TimeObject => {
-	const { hrs24, hrs12, minutes } = invalidTimeObj
+export const straightenTimeObject: StraightenTimeObject = ({
+	basedOn,
+	invalidTimeObject,
+}): TimeObject => {
+	const { hrs24, hrs12, minutes } = invalidTimeObject
 
-	const mode = straightenTimeObjectMode(basedOn, invalidTimeObj)
+	const mode = straightenTimeObjectMode(basedOn, invalidTimeObject)
 	const isAM = mode === 'AM'
 
 	const use12hr = basedOn === 'hrs12'

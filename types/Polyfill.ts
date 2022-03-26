@@ -166,13 +166,8 @@ export interface Polyfill {
 	modifyString24hr: ModifyString24hr
 	/** Utility for incrementing or decrementing a time object */
 	modifyTimeObject: ModifyTimeObject
-	/** Utility for turning an invalid time object (eg. hrs24 = 13, mode = 'AM') into a valid time object.
-	 *
-	 * @param basedOn - Determine if the return time object should align with the `hrs12 (+ mode)` value or the `hrs24` value.
-	 * @param invalidTimeObj - The invalid time object that you want to transform.
-	 */
+	/** Utility for turning an invalid time object (eg. hrs24 = 13, mode = 'AM') into a valid time object. */
 	straightenTimeObject: StraightenTimeObject
-
 	/** Regular expressions for checking if time strings match the expected format. */
 	regex: Regex
 

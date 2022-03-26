@@ -26,7 +26,12 @@ export default (): void => {
 
 				function alignTo12hr(): void {
 					it('align to hrs12', () => {
-						expect(straightenTimeObject('hrs12', invalidTimeObject)).to.deep.equal({
+						expect(
+							straightenTimeObject({
+								basedOn: 'hrs12',
+								invalidTimeObject: invalidTimeObject,
+							}),
+						).to.deep.equal({
 							hrs12: 1,
 							hrs24: 1,
 							minutes: 0,
@@ -37,7 +42,12 @@ export default (): void => {
 
 				function alignTo24hr(): void {
 					it('align to hrs24', () => {
-						expect(straightenTimeObject('hrs24', invalidTimeObject)).to.deep.equal({
+						expect(
+							straightenTimeObject({
+								basedOn: 'hrs24',
+								invalidTimeObject: invalidTimeObject,
+							}),
+						).to.deep.equal({
 							hrs12: 1,
 							hrs24: 13,
 							minutes: 0,
@@ -54,7 +64,12 @@ export default (): void => {
 
 				function alignTo12hr(): void {
 					it('align to hrs12', () => {
-						expect(straightenTimeObject('hrs12', validTimeObject)).to.deep.equal({
+						expect(
+							straightenTimeObject({
+								basedOn: 'hrs12',
+								invalidTimeObject: validTimeObject,
+							}),
+						).to.deep.equal({
 							hrs12: 1,
 							hrs24: 13,
 							minutes: 0,
@@ -65,7 +80,12 @@ export default (): void => {
 
 				function alignTo24hr(): void {
 					it('align to hrs24', () => {
-						expect(straightenTimeObject('hrs24', validTimeObject)).to.deep.equal({
+						expect(
+							straightenTimeObject({
+								basedOn: 'hrs24',
+								invalidTimeObject: validTimeObject,
+							}),
+						).to.deep.equal({
 							hrs12: 1,
 							hrs24: 13,
 							minutes: 0,
