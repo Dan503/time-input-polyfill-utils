@@ -32,6 +32,8 @@ export const toLeadingZero12HrString: ToLeadingZero12HrString = (
 	return `${toLeadingZero(hrs)}:${toLeadingZero(minutes)} ${toLeadingZero(mode)}`
 }
 
-export const matchesTimeObject: MatchesTimeObject = (timeObjA, timeObjB) => {
-	return JSON.stringify(timeObjA) === JSON.stringify(timeObjB)
+/** Utility for checking if 2 time objects match. */
+export const matchesTimeObject: MatchesTimeObject = (timeObjA, timeObjB): boolean => {
+	const keys = getKeys({ ...timeObjA, ...timeObjB })
+	return keys.every((k) => timeObjA[k] === timeObjB[k])
 }
