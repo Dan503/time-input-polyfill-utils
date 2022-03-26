@@ -1,12 +1,12 @@
 // import './dom.ie'
 import {
+	AnyHtmlElement,
 	Segment,
 	SelectionIndex,
 	SelectionRange,
 	String12hr,
 	String24hr,
 	TimeObject,
-	AnyHtmlElement,
 } from '../../types/index'
 import { convertString12hr, convertString24hr } from '../convert/convert'
 import { regex } from '../regex/regex'
@@ -33,6 +33,7 @@ const traverseSegmentRanges = (
 	return rangesList[nextTypeIndex] || cursorSegmentRange
 }
 
+/** Essentiallly an alias for `convertString12hr(string12hr).toTimeObject()` */
 export const getString12hr: GetString12hr = (string12hr) => {
 	const timeObject = convertString12hr(string12hr).toTimeObject()
 	return {
@@ -40,6 +41,7 @@ export const getString12hr: GetString12hr = (string12hr) => {
 		timeObject,
 	}
 }
+/** Essentiallly an alias for `convertString24hr(string24hr).toTimeObject()` */
 export const getString24hr: GetString24hr = (string24hr) => {
 	const timeObject = convertString24hr(string24hr).toTimeObject()
 	return {
@@ -47,6 +49,8 @@ export const getString24hr: GetString24hr = (string24hr) => {
 		timeObject,
 	}
 }
+
+/** Retrieve the current input value as either a 12hr string, a 24hr string or a time object. */
 export const getInputValue: GetInputValue = ($input) => {
 	const value = $input?.value || ''
 	const is12hrTime = regex.string12hr.test(value)
@@ -60,6 +64,8 @@ export const getInputValue: GetInputValue = ($input) => {
 				: convertString24hr(value).toTimeObject(),
 	}
 }
+
+/** Retrieve the label text of an input element. */
 export const getLabelTextOf: GetLabelTextOf = ($input, document = window.document) => {
 	if (!$input) return ''
 	const labelText =
@@ -75,9 +81,11 @@ export const getLabelTextOf: GetLabelTextOf = ($input, document = window.documen
 	throw new Error('Cannot polyfill time input due to a missing label.')
 }
 
+/** Retrieve the currently selected segment. */
 export const getCursorSegment: GetCursorSegment = ($input) =>
 	getRangeOf($input).cursorSegment().segment
 
+/** Retrieve the segment before the selected segment. */
 export const getPrevSegment: GetNextPrevSegment = ($inputOrSegment) => {
 	if (typeof $inputOrSegment === 'string') {
 		if ($inputOrSegment === 'hrs12') return 'hrs12'
@@ -88,6 +96,7 @@ export const getPrevSegment: GetNextPrevSegment = ($inputOrSegment) => {
 	return getRangeOf($inputOrSegment).prevSegment().segment
 }
 
+/** Retrieve the segment after the selected segment. */
 export const getNextSegment: GetNextPrevSegment = ($inputOrSegment) => {
 	if (typeof $inputOrSegment === 'string') {
 		if ($inputOrSegment === 'hrs12') return 'minutes'
@@ -98,6 +107,7 @@ export const getNextSegment: GetNextPrevSegment = ($inputOrSegment) => {
 	return getRangeOf($inputOrSegment).nextSegment().segment
 }
 
+/** Retrieve the cursor ranges of various segments. Used for making selections. */
 export const getRangeOf: GetRangeOf = ($input) => ({
 	rawSelection: (): SelectionRange => {
 		if (!$input) {
@@ -126,6 +136,8 @@ export const getRangeOf: GetRangeOf = ($input) => ({
 	nextSegment: (): SelectionRange => traverseSegmentRanges($input, 'forward'),
 	prevSegment: (): SelectionRange => traverseSegmentRanges($input, 'backward'),
 })
+
+/** Retrieve a list of ancestor elements for a specific element. */
 export const getAncestorsOf: GetAncestorsOf = ($startingElem, selectorString) => {
 	// https://stackoverflow.com/a/8729274/1611058
 	let $elem: AnyHtmlElement | null = $startingElem

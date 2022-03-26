@@ -18,6 +18,7 @@ import {
 	ConvertTimeObject,
 } from './convert.types'
 
+/** Utility for converting a 12 hour time string into either a 24 hour string or a time object. */
 export const convertString12hr: ConvertString12hr = (string12hr) => {
 	validateString12hr(string12hr)
 	return {
@@ -73,6 +74,8 @@ export const convertString12hr: ConvertString12hr = (string12hr) => {
 		},
 	}
 }
+
+/** Utility for converting a 24 hour time string into either a 12 hour string or a time object. */
 export const convertString24hr: ConvertString24hr = (string24hr) => {
 	validateString24hr(string24hr)
 	return {
@@ -107,6 +110,8 @@ export const convertString24hr: ConvertString24hr = (string24hr) => {
 		},
 	}
 }
+
+/** Utility for converting a time object into either a 12 hour string or a 24 hour string. */
 export const convertTimeObject: ConvertTimeObject = (timeObject, skipValidation = false) => {
 	if (!skipValidation) {
 		validateTimeObject(timeObject)
@@ -124,6 +129,8 @@ export const convertTimeObject: ConvertTimeObject = (timeObject, skipValidation 
 		},
 	}
 }
+
+/** Utility for converting a 24hr hours number into a 12hr hours number. */
 export const convertHours24: ConvertHours24 = (hours24) => {
 	validateHours24(hours24)
 	const getHours12 = (): Hour12 => {
@@ -144,6 +151,8 @@ export const convertHours24: ConvertHours24 = (hours24) => {
 		toHours12: (): Hour12 => getHours12(),
 	}
 }
+
+/** Utility for converting a date object into either a 12hr string, a 24hr string or a time object. */
 export const convertDateObject: ConvertDateObject = (date) => {
 	return {
 		to12hr(): String12hr {

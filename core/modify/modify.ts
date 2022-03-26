@@ -20,8 +20,10 @@ import {
 	ModifyString24hr,
 	ModifyTimeObject,
 	StraightenTimeObject,
+	StraightenTimeObjectParams,
 } from './modify.types'
 
+/** Utility for incrementing or decrementing a 12hr string */
 export const modifyString12hr: ModifyString12hr = (string12hr) => {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	const modeToggle = (preferredModeWhenNull: GuaranteedMode) => ({
@@ -108,6 +110,8 @@ export const modifyString12hr: ModifyString12hr = (string12hr) => {
 		},
 	}
 }
+
+/** Utility for incrementing or decrementing a 24hr string */
 export const modifyString24hr: ModifyString24hr = (string24hr) => {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	const modeToggle = (preferredModeWhenNull: GuaranteedMode) => ({
@@ -177,6 +181,8 @@ export const modifyString24hr: ModifyString24hr = (string24hr) => {
 			),
 	}
 }
+
+/** Utility for incrementing or decrementing a time object */
 export const modifyTimeObject: ModifyTimeObject = (timeObject) => {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	const modeToggle = (preferredModeWhenNull: GuaranteedMode) => ({
@@ -428,10 +434,11 @@ const nudgeTimeObjectHrs = <T extends 'hrs12' | 'hrs24'>({
 	}
 }
 
+/** Utility for turning an invalid time object (eg. hrs24 = 13, mode = 'AM') into a valid time object. */
 export const straightenTimeObject: StraightenTimeObject = ({
 	basedOn,
 	invalidTimeObject,
-}): TimeObject => {
+}: StraightenTimeObjectParams): TimeObject => {
 	const { hrs24, hrs12, minutes } = invalidTimeObject
 
 	const mode = straightenTimeObjectMode(basedOn, invalidTimeObject)

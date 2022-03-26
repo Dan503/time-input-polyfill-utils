@@ -69,6 +69,11 @@ import {
 import { MaxAndMins, Ranges, Segment, SelectionRange } from './index'
 import { TimeObjectKey } from './timeObject'
 
+// You might notice that the documentation for the functions has been duplicated here.
+// If using this Polyfill object, the ts Doc comments wont appear in the editor unless they are filled out here.
+// If using the functions directly by importing, the ts Doc comments wont appear in the editor unless they are directly above the function.
+
+/** All utilities in one package */
 export interface Polyfill {
 	/** Create the element that holds the screen reader text inside it. */
 	a11yCreate: A11yCreate
@@ -125,7 +130,7 @@ export interface Polyfill {
 	/** Retrieve a list of ancestor elements for a specific element. */
 	getAncestorsOf: GetAncestorsOf
 
-	/** Retrieve the current state of the `[shift]` key. */
+	/** Retrieve the current state of the `[shift]` key. (Warning: will fail if bubbling is prevented) */
 	isShiftHeldDown: IsShiftHeldDown
 
 	/** Check if a 24hr hours value is a PM value. */
@@ -155,7 +160,7 @@ export interface Polyfill {
 	/** Check if a value is in a 24hr string format. */
 	isString24hr: IsString24hr
 
-	/** Utility for keeping track of manually entered times. */
+	/** Used for keeping track of Manual key strokes inside a time input */
 	// I don't know why ES Lint thinks ManualEntryLog is undefined
 	// eslint-disable-next-line no-undef
 	ManualEntryLog: typeof ManualEntryLog
@@ -187,7 +192,7 @@ export interface Polyfill {
 	validateString12hr: ValidateString12hr
 	/** Check if a string is a valid 24hr time string */
 	validateString24hr: ValidateString24hr
-	/** Check if a string is a valid time object */
+	/** Check if an object is a valid time object */
 	validateTimeObject: ValidateTimeObject
 	/** Check if a number is a valid 24hr hours value */
 	validateHours24: ValidateHours24

@@ -142,7 +142,7 @@ export interface ModifyTimeObject {
 	}
 }
 
-type StraightenTimeObjectParams = {
+export type StraightenTimeObjectParams = {
 	/** Determine if the return time object should align with the `hrs12 (+ mode)` value or the `hrs24` value. */
 	basedOn: 'hrs12' | 'hrs24'
 	/**
