@@ -10,7 +10,7 @@
 		"pretty": true,
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
-		"removeComments": true,
+		"removeComments": false,
 		"allowSyntheticDefaultImports": true
 	}
 }
