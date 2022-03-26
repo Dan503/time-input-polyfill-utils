@@ -479,14 +479,12 @@ export const straightenTimeObject: StraightenTimeObject = ({
 
 const straightenTimeObjectMode = (basedOn: 'hrs12' | 'hrs24', invalidTimeObj: TimeObject): Mode => {
 	const { hrs24, mode } = invalidTimeObj
-	if (mode === null) {
-		return null
-	}
+
 	if (basedOn === 'hrs12') {
-		return mode === null ? 'AM' : mode
+		return mode
 	}
 
-	if (basedOn === 'hrs24' && invalidTimeObj.hrs24 === null && mode !== null) {
+	if (mode && invalidTimeObj.hrs24 === null) {
 		return mode
 	}
 
