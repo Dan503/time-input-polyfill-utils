@@ -9,6 +9,7 @@ import {
 	TimeObject,
 } from '../../types/index'
 import { convertString12hr, convertString24hr } from '../convert/convert'
+import { isString12hr, isString24hr } from '../is/is'
 import { regex } from '../regex/regex'
 import { ranges, rangesList } from '../staticValues'
 import {
@@ -20,6 +21,7 @@ import {
 	GetRangeOf,
 	GetString12hr,
 	GetString24hr,
+	ProvideTimeString,
 } from './get.types'
 
 const traverseSegmentRanges = (
@@ -47,6 +49,33 @@ export const getString24hr: GetString24hr = (string24hr) => {
 	return {
 		...timeObject,
 		timeObject,
+	}
+}
+
+/** If you don't know if a string is 24hr or 12hr format, pass it into this function and it will consistently return in the desired time format that you want. */
+export const provideTimeString: ProvideTimeString = (timeString: String12hr | String24hr) => {
+	const is12hr = isString12hr(timeString)
+	const is24hr = isString24hr(timeString)
+
+	if (!is12hr && !is24hr) {
+		throw new Error(
+			`"${timeString}" is not a valid time string. Must be either in either 12 or 24 hour time format.`,
+		)
+	}
+
+	return {
+		as24hr(): string {
+			if (is12hr) {
+				return convertString12hr(timeString).to24hr()
+			}
+			return timeString
+		},
+		as12hr(): string {
+			if (is24hr) {
+				return convertString24hr(timeString).to12hr()
+			}
+			return timeString
+		},
 	}
 }
 
@@ -119,8 +148,8 @@ export const getRangeOf: GetRangeOf = ($input) => ({
 		}
 		const within = (segment: Segment, value: number): boolean =>
 			ranges[segment].start <= value && value <= ranges[segment].end
-		const start = <SelectionIndex>$input.selectionStart
-		const end = <SelectionIndex>$input.selectionEnd
+		const start = $input.selectionStart as SelectionIndex
+		const end = $input.selectionEnd as SelectionIndex
 		const segment: Segment =
 			(within('mode', start) && 'mode') || (within('minutes', start) && 'minutes') || 'hrs12'
 		return {
@@ -178,9 +207,9 @@ function aria_label($input: HTMLInputElement): string {
 }
 
 function for_attribute($input: HTMLInputElement, document: Document = window.document): string {
-	const $forLabel = <HTMLLabelElement | null>(
-		document.querySelector('label[for="' + $input.id + '"]')
-	)
+	const $forLabel = document.querySelector(
+		'label[for="' + $input.id + '"]',
+	) as HTMLLabelElement | null
 	return elemText($forLabel)
 }
 

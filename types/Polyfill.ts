@@ -22,6 +22,7 @@ import {
 	GetRangeOf,
 	GetString12hr,
 	GetString24hr,
+	ProvideTimeString,
 } from '../core/get/get.types'
 import {
 	IsAmHrs24,
@@ -111,6 +112,8 @@ export interface Polyfill {
 	/** Utility for converting a date object into either a 12hr string, a 24hr string or a time object. */
 	convertDateObject: ConvertDateObject
 
+	/** If you don't know if a string is 24hr or 12hr format, pass it into this function and it will consistently return in the desired time format that you want. */
+	provideTimeString: ProvideTimeString
 	/** Essentiallly an alias for `convertString12hr(string12hr).toTimeObject()` */
 	getString12hr: GetString12hr
 	/** Essentiallly an alias for `convertString24hr(string24hr).toTimeObject()` */
