@@ -13,20 +13,14 @@ import { toLeadingZero } from '../utils/utils'
 
 type BlankFunc = () => void
 
-type zeroToNine = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+type ZeroToNine = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 
-type GenericEntry = zeroToNine | 'a' | 'p' | string
+type GenericEntry = ZeroToNine | 'a' | 'p' | string
 type GenericEntries = Array<GenericEntry>
-type NumericEntries = Array<zeroToNine>
-
-const convertNumberToEntries = (number: DefinedHour12 | DefinedMinute): NumericEntries => {
-	return String(number)
-		.split('')
-		.map((value) => <zeroToNine>parseInt(value))
-}
+type NumericEntries = Array<ZeroToNine>
 
 const convertEntriesToNumber = (entries: NumericEntries): DefinedHour12 | DefinedMinute => {
-	return <DefinedHour12 | DefinedMinute>parseInt(entries.join(''))
+	return parseInt(entries.join('')) as DefinedHour12 | DefinedMinute
 }
 
 interface SegmentLogConstructor {
@@ -128,7 +122,7 @@ class SegmentLog {
 					this.entries = [0]
 					this.value = isHrsSegment ? 12 : 0
 				} else {
-					this.entries.push(number as zeroToNine)
+					this.entries.push(number as ZeroToNine)
 					this.value = convertEntriesToNumber(this.entries as NumericEntries)
 					this.limitHit()
 				}
@@ -136,12 +130,12 @@ class SegmentLog {
 				return
 			}
 
-			const newEntries = <NumericEntries>[...this.entries, <zeroToNine>number]
+			const newEntries = [...this.entries, number as ZeroToNine] as NumericEntries
 			const newValue = convertEntriesToNumber(newEntries)
 
 			if (isGreaterThanMax(newValue)) {
-				this.value = <zeroToNine>number
-				this.entries = [<zeroToNine>number]
+				this.value = number as ZeroToNine
+				this.entries = [this.value]
 
 				if (isGreaterThanMax(number * 10)) {
 					this.limitHit()
