@@ -23,23 +23,25 @@ const convertEntriesToNumber = (entries: NumericEntries): DefinedHour12 | Define
 	return parseInt(entries.join('')) as DefinedHour12 | DefinedMinute
 }
 
+type OnUpdate = (wasLimitHit: boolean) => void
+
 interface SegmentLogConstructor {
 	startingValue: Hour12 | Minute | Mode
 	segment: Segment
-	onUpdate: BlankFunc
+	onUpdate: OnUpdate
 	onLimitHit: BlankFunc
 }
 class SegmentLog {
 	value: Hour12 | Minute | Mode
 	segment: Segment
 	entries: GenericEntries = []
-	update: () => void
+	update: OnUpdate
 	limitHit: () => void
 
 	constructor({ startingValue, segment, onUpdate, onLimitHit }: SegmentLogConstructor) {
 		this.value = startingValue
 		this.segment = segment
-		this.update = (): void => onUpdate()
+		this.update = (wasLimitHit: boolean): void => onUpdate(wasLimitHit)
 		this.limitHit = (): void => onLimitHit()
 	}
 
@@ -91,26 +93,26 @@ class SegmentLog {
 				if ((isFirst || isThird) && isZero) {
 					this.entries = [0]
 					this.value = 12
-					this.update()
+					this.update(false)
 					return
 				} else if (isSecondZero) {
 					this.entries = [0, 0]
 					this.value = 12
 					this.limitHit()
-					this.update()
+					this.update(true)
 					return
 				}
 			} else if (this.segment === 'minutes') {
 				if ((isFirst || isThird) && isZero) {
 					this.entries = [0]
 					this.value = 0
-					this.update()
+					this.update(false)
 					return
 				} else if (isSecondZero) {
 					this.entries = [0, 0]
 					this.value = 0
 					this.limitHit()
-					this.update()
+					this.update(true)
 					return
 				}
 			}
@@ -121,12 +123,13 @@ class SegmentLog {
 				if (this.entries[0] > max) {
 					this.entries = [0]
 					this.value = isHrsSegment ? 12 : 0
+					this.update(false)
 				} else {
 					this.entries.push(number as ZeroToNine)
 					this.value = convertEntriesToNumber(this.entries as NumericEntries)
 					this.limitHit()
+					this.update(true)
 				}
-				this.update()
 				return
 			}
 
@@ -139,17 +142,21 @@ class SegmentLog {
 
 				if (isGreaterThanMax(number * 10)) {
 					this.limitHit()
+					this.update(true)
+					return
 				}
 			} else {
 				this.value = newValue
 				this.entries = newEntries
 				if (newEntries.length === 2 || isGreaterThanMax(number * 10)) {
 					this.limitHit()
+					this.update(true)
+					return
 				}
 			}
 		}
 
-		this.update()
+		this.update(false)
 	}
 
 	/**
@@ -167,7 +174,7 @@ class SegmentLog {
 	clear(): void {
 		this.reset()
 		this.value = null
-		this.update()
+		this.update(false)
 	}
 }
 
@@ -175,7 +182,7 @@ interface ManualEntryLogConstructor {
 	/** The current Time object value */
 	timeObject: TimeObject
 	/** Callback function for when the values change */
-	onUpdate?: (entryLog: ManualEntryLog) => void
+	onUpdate?: (entryLog: ManualEntryLog, wasLimitHit: boolean) => void
 	/** Callback function for when the manual entry exceeds the maximum range */
 	onLimitHit?: (entryLog: ManualEntryLog) => void
 }
@@ -190,11 +197,7 @@ export class ManualEntryLog {
 	mode: SegmentLog
 	fullValue12hr: String12hr
 
-	constructor({
-		timeObject,
-		onUpdate = (): void => {},
-		onLimitHit = (): void => {},
-	}: ManualEntryLogConstructor) {
+	constructor({ timeObject, onUpdate, onLimitHit }: ManualEntryLogConstructor) {
 		const getFullValue12hr = (): String12hr => {
 			return [
 				toLeadingZero(this.hrs12.value),
@@ -205,10 +208,10 @@ export class ManualEntryLog {
 			].join('')
 		}
 
-		const update: BlankFunc = () => {
+		const update: OnUpdate = (wasLimitHit) => {
 			this.fullValue12hr = getFullValue12hr()
 			if (onUpdate) {
-				onUpdate(this)
+				onUpdate(this, wasLimitHit)
 			}
 		}
 
