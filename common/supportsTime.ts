@@ -1,3 +1,4 @@
+import { window, document } from 'browser-monads-ts'
 import '../types/Window'
 // This is intentionally separate from index.ts since it needs to be downloaded in modern browsers
 

@@ -1,3 +1,4 @@
+import { window } from 'browser-monads-ts'
 import { getCursorSegment, getInputValue, getLabelTextOf } from '../get/get'
 import { a11yID } from '../staticValues'
 import { A11yClear, A11yCreate, A11yUpdate, GetA11yElement, GetA11yValue } from './a11y.types'

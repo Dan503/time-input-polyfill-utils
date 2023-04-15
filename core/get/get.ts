@@ -1,12 +1,13 @@
 // import './dom.ie'
+import { window } from 'browser-monads-ts'
 import {
+	AnyHtmlElement,
 	Segment,
 	SelectionIndex,
 	SelectionRange,
 	String12hr,
 	String24hr,
 	TimeObject,
-	AnyHtmlElement,
 } from '../../types/index'
 import { convertString12hr, convertString24hr } from '../convert/convert'
 import { regex } from '../regex/regex'

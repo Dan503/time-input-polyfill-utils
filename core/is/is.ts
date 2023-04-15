@@ -1,3 +1,4 @@
+import { window } from 'browser-monads-ts'
 import { getKeys } from '../../helpers/utils'
 import { TimeObjectKey } from '../../types/timeObject'
 import { regex } from '../regex/regex'

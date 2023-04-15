@@ -1,3 +1,4 @@
+import { document } from 'browser-monads-ts'
 import { AnyHtmlElement } from '../../index'
 import { getRangeOf } from '../get/get'
 import { ranges } from '../staticValues'

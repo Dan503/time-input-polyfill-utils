@@ -9,6 +9,6 @@ export default {
 	plugins: [typeScript(), babel(), terser({ output: { comments: false } })],
 	output: {
 		file: `${tsConfig.compilerOptions.outDir}/time-input-polyfill-utils.min.js`,
-		format: 'iife',
+		format: 'umd',
 	},
 }

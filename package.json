@@ -17,7 +17,7 @@
 		"cy:is": "cypress run --spec \"cypress/integration/is.test.ts\"",
 		"prepublishOnly": "npx rollup -c && npx tsc --project tsconfig.prepublish.json",
 		"postpublish": "rm -rf npm",
-		"testpublish": "npm run prepublish && npm run postpublish",
+		"testpublish": "npm run prepublishOnly && npm run postpublish",
 		"pub": "npm publish --access public"
 	},
 	"repository": {
@@ -39,7 +39,9 @@
 		"url": "https://github.com/Dan503/time-input-polyfill-utils/issues"
 	},
 	"homepage": "https://github.com/Dan503/time-input-polyfill-utils#readme",
-	"dependencies": {},
+	"dependencies": {
+		"browser-monads-ts": "^2.0.1"
+	},
 	"devDependencies": {
 		"@cypress/webpack-preprocessor": "^4.1.1",
 		"@rollup/plugin-typescript": "^4.0.0",
