@@ -5,7 +5,6 @@
 	"module": "npm/mjs/index.js",
 	"main": "npm/umd/index.js",
 	"jsdelivr": "npm/umd/time-input-polyfill-utils.min.js",
-	"type": "module",
 	"scripts": {
 		"start": "cypress open",
 		"test": "cypress run",
