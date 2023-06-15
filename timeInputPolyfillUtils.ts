@@ -1,5 +1,4 @@
-import { window } from 'browser-monads-ts'
 import * as utils from './index'
-import './types/Window'
+import { window } from './types/Window'
 
 window.timeInputPolyfillUtils = utils
