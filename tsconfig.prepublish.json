@@ -3,12 +3,14 @@
 		"moduleResolution": "node",
 		"alwaysStrict": true,
 		"noImplicitAny": true,
+		"strict": true,
 		"target": "es5",
-		"module": "commonjs",
-		"declaration": true,
+		"module": "UMD",
 		"lib": ["es2015", "es2017", "dom"],
+		"declaration": true,
 		"removeComments": false,
-		"outDir": "npm"
+		"outDir": "npm",
+		"allowUmdGlobalAccess": true
 	},
 	"files": ["./index.ts"],
 	"include": ["./core/**/*.ts", "./common/**/*.ts", "./types/**/*.ts", "./helpers/**/*.ts"],
