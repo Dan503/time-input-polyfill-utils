@@ -1,5 +1,8 @@
-import { document, window } from 'browser-monads-ts'
 import { Polyfill } from './Polyfill'
+
+// https://github.com/danestves/browser-monads-ts/blob/main/src/index.ts
+const win: Window | undefined = window
+const doc: Document | undefined = win?.document
 
 declare global {
 	// Adds extra properties to the Window interface
@@ -9,6 +12,4 @@ declare global {
 	}
 }
 
-// Needed for telling Typescript that this file can be imported
-// Exporting the browser-monads-ts window and document here so ts knows about the extra Window interface props
-export { document, window }
+export { doc, win }

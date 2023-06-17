@@ -39,9 +39,6 @@
 		"url": "https://github.com/Dan503/time-input-polyfill-utils/issues"
 	},
 	"homepage": "https://github.com/Dan503/time-input-polyfill-utils#readme",
-	"dependencies": {
-		"browser-monads-ts": "^2.0.1"
-	},
 	"devDependencies": {
 		"@cypress/webpack-preprocessor": "^4.1.1",
 		"@rollup/plugin-node-resolve": "^15.1.0",
