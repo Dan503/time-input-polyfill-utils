@@ -1,5 +1,4 @@
 // import './dom.ie'
-import { window } from 'browser-monads-ts'
 import {
 	AnyHtmlElement,
 	Segment,
@@ -9,6 +8,7 @@ import {
 	String24hr,
 	TimeObject,
 } from '../../types/index'
+import { doc } from '../../types/Window'
 import { convertString12hr, convertString24hr } from '../convert/convert'
 import { regex } from '../regex/regex'
 import { ranges, rangesList } from '../staticValues'
@@ -61,7 +61,7 @@ export const getInputValue: GetInputValue = ($input) => {
 				: convertString24hr(value).toTimeObject(),
 	}
 }
-export const getLabelTextOf: GetLabelTextOf = ($input, document = window.document) => {
+export const getLabelTextOf: GetLabelTextOf = ($input, document = doc) => {
 	if (!$input) return ''
 	const labelText =
 		aria_labelledby($input, document) ||
@@ -110,8 +110,8 @@ export const getRangeOf: GetRangeOf = ($input) => ({
 		}
 		const within = (segment: Segment, value: number): boolean =>
 			ranges[segment].start <= value && value <= ranges[segment].end
-		const start = <SelectionIndex>$input.selectionStart
-		const end = <SelectionIndex>$input.selectionEnd
+		const start = $input.selectionStart as SelectionIndex
+		const end = $input.selectionEnd as SelectionIndex
 		const segment: Segment =
 			(within('mode', start) && 'mode') || (within('minutes', start) && 'minutes') || 'hrs12'
 		return {
@@ -130,7 +130,7 @@ export const getRangeOf: GetRangeOf = ($input) => ({
 export const getAncestorsOf: GetAncestorsOf = ($startingElem, selectorString) => {
 	// https://stackoverflow.com/a/8729274/1611058
 	let $elem: AnyHtmlElement | null = $startingElem
-	const ancestors = []
+	const ancestors: Array<AnyHtmlElement> = []
 	let i = 0
 	while ($elem) {
 		if (i !== 0) {
@@ -152,9 +152,9 @@ export const getAncestorsOf: GetAncestorsOf = ($startingElem, selectorString) =>
 
 const elemText = ($elem: AnyHtmlElement | null): string => $elem?.textContent?.trim() || ''
 
-function aria_labelledby($input: HTMLInputElement, document: Document = window.document): string {
+function aria_labelledby($input: HTMLInputElement, document = doc): string {
 	const ariaLabelByID = $input?.getAttribute('aria-labelledby')
-	if (ariaLabelByID) {
+	if (ariaLabelByID && document) {
 		const $ariaLabelBy = document.getElementById(ariaLabelByID)
 		return elemText($ariaLabelBy)
 	}
@@ -166,10 +166,9 @@ function aria_label($input: HTMLInputElement): string {
 	return ariaLabel || ''
 }
 
-function for_attribute($input: HTMLInputElement, document: Document = window.document): string {
-	const $forLabel = <HTMLLabelElement | null>(
-		document.querySelector('label[for="' + $input.id + '"]')
-	)
+function for_attribute($input: HTMLInputElement, document = doc): string {
+	const $forLabel =
+		document?.querySelector<HTMLLabelElement>('label[for="' + $input.id + '"]') || null
 	return elemText($forLabel)
 }
 

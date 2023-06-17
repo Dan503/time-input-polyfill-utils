@@ -1,5 +1,5 @@
-import { document } from 'browser-monads-ts'
 import { AnyHtmlElement } from '../../index'
+import { doc } from '../../types/Window'
 import { getRangeOf } from '../get/get'
 import { ranges } from '../staticValues'
 import { toArray } from '../utils/utils'
@@ -13,10 +13,10 @@ import {
 
 export const selectAll: QuerySelectAll = <ElemType extends AnyHtmlElement = AnyHtmlElement>(
 	selector: string,
-	startingElem: AnyHtmlElement | Document = document,
+	startingElem: AnyHtmlElement | Document | undefined = doc,
 ): Array<ElemType> => {
-	const elements = startingElem.querySelectorAll<ElemType>(selector)
-	return toArray<ElemType>(elements)
+	const elements = startingElem?.querySelectorAll<ElemType>(selector)
+	return toArray<ElemType>(elements || [])
 }
 
 export const selectSegment: SelectSegment = ($input, segment = 'hrs12') => {

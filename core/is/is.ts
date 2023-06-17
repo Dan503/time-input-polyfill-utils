@@ -1,6 +1,6 @@
-import { window } from 'browser-monads-ts'
 import { getKeys } from '../../helpers/utils'
 import { TimeObjectKey } from '../../types/timeObject'
+import { win } from '../../types/Window'
 import { regex } from '../regex/regex'
 import { timeObjectKeys } from '../staticValues'
 import { toNumber } from '../utils/utils'
@@ -22,8 +22,8 @@ import {
 } from './is.types'
 
 export let isShiftHeldDown: IsShiftHeldDown = false
-window.addEventListener('keyup', (e) => (isShiftHeldDown = e.shiftKey))
-window.addEventListener('keydown', (e) => (isShiftHeldDown = e.shiftKey))
+win?.addEventListener('keyup', (e) => (isShiftHeldDown = e.shiftKey))
+win?.addEventListener('keydown', (e) => (isShiftHeldDown = e.shiftKey))
 
 const isValidTimeString = ({ value, format, minHrs, maxHrs }: ValidateTimeStringProps): boolean => {
 	const isFormatValid = regex[format].test(value)
