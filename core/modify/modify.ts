@@ -13,6 +13,7 @@ import { convertString12hr, convertString24hr, convertTimeObject } from '../conv
 import { getCursorSegment } from '../get/get'
 import { isAmTimeObject } from '../is/is'
 import { maxAndMins } from '../staticValues'
+import { validateTimeObject } from '../validate/validate'
 import {
 	Action,
 	Integration,
@@ -446,6 +447,14 @@ export const straightenTimeObject: StraightenTimeObject = ({
 
 	const use12hr = basedOn === 'hrs12'
 
+	let isValid = true
+
+	try {
+		validateTimeObject(invalidTimeObject)
+	} catch (e) {
+		isValid = false
+	}
+
 	const get12hrBasedOn24hr = (): Hour12 => {
 		const hr12 = (hrs24 !== null && hrs24 > 12 ? hrs24 - 12 : hrs24) as Hour12 | 0
 		if (hr12 === 0) {
@@ -478,7 +487,7 @@ export const straightenTimeObject: StraightenTimeObject = ({
 		hrs12: use12hr ? hrs12 : get12hrBasedOn24hr(),
 		hrs24: use12hr ? get24hrBasedOn12hr() : hrs24,
 		minutes,
-		mode,
+		mode: invalidTimeObject.mode === null && isValid ? null : mode,
 	}
 
 	return newTimeObject
