@@ -1,4 +1,6 @@
 import * as utils from './index'
-import './types/Window'
+import { win } from './types/Window'
 
-window.timeInputPolyfillUtils = utils
+if (win) {
+	win.timeInputPolyfillUtils = utils
+}

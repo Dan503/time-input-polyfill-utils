@@ -8,6 +8,7 @@ import {
 	String24hr,
 	TimeObject,
 } from '../../types/index'
+import { doc } from '../../types/Window'
 import { convertString12hr, convertString24hr } from '../convert/convert'
 import { isString12hr, isString24hr } from '../is/is'
 import { regex } from '../regex/regex'
@@ -93,9 +94,7 @@ export const getInputValue: GetInputValue = ($input) => {
 				: convertString24hr(value).toTimeObject(),
 	}
 }
-
-/** Retrieve the label text of an input element. */
-export const getLabelTextOf: GetLabelTextOf = ($input, document = window.document) => {
+export const getLabelTextOf: GetLabelTextOf = ($input, document = doc) => {
 	if (!$input) return ''
 	const labelText =
 		aria_labelledby($input, document) ||
@@ -170,7 +169,7 @@ export const getRangeOf: GetRangeOf = ($input) => ({
 export const getAncestorsOf: GetAncestorsOf = ($startingElem, selectorString) => {
 	// https://stackoverflow.com/a/8729274/1611058
 	let $elem: AnyHtmlElement | null = $startingElem
-	const ancestors = []
+	const ancestors: Array<AnyHtmlElement> = []
 	let i = 0
 	while ($elem) {
 		if (i !== 0) {
@@ -192,9 +191,9 @@ export const getAncestorsOf: GetAncestorsOf = ($startingElem, selectorString) =>
 
 const elemText = ($elem: AnyHtmlElement | null): string => $elem?.textContent?.trim() || ''
 
-function aria_labelledby($input: HTMLInputElement, document: Document = window.document): string {
+function aria_labelledby($input: HTMLInputElement, document = doc): string {
 	const ariaLabelByID = $input?.getAttribute('aria-labelledby')
-	if (ariaLabelByID) {
+	if (ariaLabelByID && document) {
 		const $ariaLabelBy = document.getElementById(ariaLabelByID)
 		return elemText($ariaLabelBy)
 	}
@@ -206,10 +205,9 @@ function aria_label($input: HTMLInputElement): string {
 	return ariaLabel || ''
 }
 
-function for_attribute($input: HTMLInputElement, document: Document = window.document): string {
-	const $forLabel = document.querySelector(
-		'label[for="' + $input.id + '"]',
-	) as HTMLLabelElement | null
+function for_attribute($input: HTMLInputElement, document = doc): string {
+	const $forLabel =
+		document?.querySelector<HTMLLabelElement>('label[for="' + $input.id + '"]') || null
 	return elemText($forLabel)
 }
 

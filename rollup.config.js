@@ -1,18 +1,20 @@
 var typeScript = require('@rollup/plugin-typescript')
-var json = require('@rollup/plugin-json')
 var babel = require('rollup-plugin-babel')
+var nodeResolve = require('@rollup/plugin-node-resolve')
 var { terser } = require('rollup-plugin-terser')
+
+var tsConfig = require('./tsconfig.umd.json')
 
 export default {
 	input: 'timeInputPolyfillUtils.ts',
 	plugins: [
-		typeScript({ tsconfig: './tsconfig.prepublish.rollup.json' }),
-		json(),
+		typeScript(),
+		nodeResolve({ preferBuiltins: false }),
 		babel(),
 		terser({ output: { comments: false } }),
 	],
 	output: {
-		file: 'dist/time-input-polyfill-utils.min.js',
-		format: 'iife',
+		file: `${tsConfig.compilerOptions.outDir}/time-input-polyfill-utils.min.js`,
+		format: 'umd',
 	},
 }

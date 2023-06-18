@@ -1,9 +1,14 @@
-import '../types/Window'
+import { doc, win } from '../types/Window'
 // This is intentionally separate from index.ts since it needs to be downloaded in modern browsers
 
 // https://stackoverflow.com/a/10199306/1611058
 function get_time_support(): boolean {
-	const input = document.createElement('input')
+	const input = doc?.createElement('input')
+
+	if (!input) {
+		return false
+	}
+
 	input.setAttribute('type', 'time')
 
 	const notValid = 'not-a-time'
@@ -14,6 +19,9 @@ function get_time_support(): boolean {
 
 const supportsTime = get_time_support()
 
-if (window) window.supportsTime = supportsTime
+if (win) {
+	win.supportsTime = supportsTime
+}
+
 export default supportsTime
 export { supportsTime }

@@ -1,4 +1,5 @@
 import { AnyHtmlElement } from '../../index'
+import { doc } from '../../types/Window'
 import { getRangeOf } from '../get/get'
 import { ranges } from '../staticValues'
 import { toArray } from '../utils/utils'
@@ -13,10 +14,10 @@ import {
 /** Essentially `document.querySelectAll()` but it returns an array of elements instead of a node list. */
 export const selectAll: QuerySelectAll = <ElemType extends AnyHtmlElement = AnyHtmlElement>(
 	selector: string,
-	startingElem: AnyHtmlElement | Document = document,
+	startingElem: AnyHtmlElement | Document | undefined = doc,
 ): Array<ElemType> => {
-	const elements = startingElem.querySelectorAll<ElemType>(selector)
-	return toArray<ElemType>(elements)
+	const elements = startingElem?.querySelectorAll<ElemType>(selector)
+	return toArray<ElemType>(elements || [])
 }
 
 /** Select a specific segment of a time input polyfill. */
