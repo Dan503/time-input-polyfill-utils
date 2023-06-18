@@ -16,3 +16,7 @@ export const blankValues: BlankValues = {
 		mode: null,
 	},
 }
+
+// a11yID needs to be accessed by `@time-input-polyfill/tests`
+/** The id for the screen reader accessibility block that is generated */
+export const a11yID = 'time-input-polyfill-accessibility-block'

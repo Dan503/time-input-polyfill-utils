@@ -1,0 +1,19 @@
+{
+	"extends": "./tsconfig-base.json",
+	"compilerOptions": {
+		"moduleResolution": "node",
+		"alwaysStrict": true,
+		"noImplicitAny": true,
+		"strict": true,
+		"target": "es5",
+		"module": "UMD",
+		"lib": ["es2015", "es2017", "dom"],
+		"declaration": true,
+		"removeComments": false,
+		"outDir": "npm/umd",
+		"allowUmdGlobalAccess": true
+	},
+	"files": ["./index.ts"],
+	"include": ["./core/**/*.ts", "./common/**/*.ts", "./types/**/*.ts", "./helpers/**/*.ts"],
+	"exclude": ["./node_modules", "./core/**/*.test.ts"]
+}

@@ -13,6 +13,7 @@ import {
 	getRangeOf,
 	getString12hr,
 	getString24hr,
+	provideTimeString,
 } from './get'
 
 getAncestorsTests()
@@ -21,6 +22,7 @@ getString24hrTests()
 getValueTests()
 getLabelTextTests()
 getRangeTests()
+provideTimeStringTests()
 
 function getAncestorsTests(): void {
 	describe('Get ancestors tests', () => {
@@ -155,36 +157,36 @@ function getLabelTextTests(): void {
 		})
 		it(`aria-labelledby`, async () => {
 			const { document } = await loadPage()
-			const $input = <HTMLInputElement>(
-				document.querySelector('[aria-labelledby="aria-labelledby"]')
-			)
+			const $input = document.querySelector(
+				'[aria-labelledby="aria-labelledby"]',
+			) as HTMLInputElement
 			expect(getLabelTextOf($input, document)).to.equal('aria-labelledby label')
 		})
 		it(`aria-label`, async () => {
 			const { document } = await loadPage()
-			const $input = <HTMLInputElement>(
-				document.querySelector('[aria-label="aria-label label"]')
-			)
+			const $input = document.querySelector(
+				'[aria-label="aria-label label"]',
+			) as HTMLInputElement
 			expect(getLabelTextOf($input, document)).to.equal('aria-label label')
 		})
 		it(`For attribute`, async () => {
 			const { document } = await loadPage()
-			const $input = <HTMLInputElement>document.getElementById('forAttr')
+			const $input = document.getElementById('forAttr') as HTMLInputElement
 			expect(getLabelTextOf($input, document)).to.equal('For attribute label')
 		})
 		it(`Wrapper label`, async () => {
 			const { document } = await loadPage()
-			const $input = <HTMLInputElement>document.getElementById('wrappedInput')
+			const $input = document.getElementById('wrappedInput') as HTMLInputElement
 			expect(getLabelTextOf($input, document)).to.equal('Wrapper label')
 		})
 		it(`Title label`, async () => {
 			const { document } = await loadPage()
-			const $input = <HTMLInputElement>document.querySelector('[title="title label"]')
+			const $input = document.querySelector('[title="title label"]') as HTMLInputElement
 			expect(getLabelTextOf($input, document)).to.equal('title label')
 		})
 		it(`Missing label`, async () => {
 			const { document } = await loadPage()
-			const $input = <HTMLInputElement>document.getElementById('noLabel')
+			const $input = document.getElementById('noLabel') as HTMLInputElement
 			failTest(
 				() => getLabelTextOf($input, document),
 				'Cannot polyfill time input due to a missing label.',
@@ -374,5 +376,41 @@ function getRangeTests(): void {
 				})
 			})
 		}
+	})
+}
+
+function provideTimeStringTests() {
+	describe('Provide time string', () => {
+		const expectedErrorMessage =
+			'"abc" is not a valid time string. Must be either in either 12 or 24 hour time format.'
+		it('invalid time string as 12hr', () => {
+			try {
+				provideTimeString('abc').as12hr()
+			} catch (e) {
+				expect((e as Error).message).to.equal(expectedErrorMessage)
+			}
+		})
+		it('invalid time string as 24hr', () => {
+			try {
+				provideTimeString('abc').as24hr()
+			} catch (e) {
+				expect((e as Error).message).to.equal(expectedErrorMessage)
+			}
+		})
+		const string12hr = '01:30 PM'
+		const string24hr = '13:30'
+
+		it('12hr as 12hr', () => {
+			expect(provideTimeString(string12hr).as12hr()).to.equal(string12hr)
+		})
+		it('12hr as 24hr', () => {
+			expect(provideTimeString(string12hr).as24hr()).to.equal(string24hr)
+		})
+		it('24hr as 24hr', () => {
+			expect(provideTimeString(string24hr).as24hr()).to.equal(string24hr)
+		})
+		it('24hr as 12hr', () => {
+			expect(provideTimeString(string24hr).as12hr()).to.equal(string12hr)
+		})
 	})
 }

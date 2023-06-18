@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"alwaysStrict": true,
+		"strict": true,
+		"noImplicitAny": true,
+		"lib": ["es2015", "es2017", "dom"],
+		"baseUrl": "../node_modules",
+		"moduleResolution": "node",
+		"pretty": true,
+		"resolveJsonModule": false,
+		"skipLibCheck": true,
+		"removeComments": false,
+		"allowSyntheticDefaultImports": true
+	}
+}

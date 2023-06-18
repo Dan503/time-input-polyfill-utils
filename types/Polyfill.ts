@@ -22,6 +22,7 @@ import {
 	GetRangeOf,
 	GetString12hr,
 	GetString24hr,
+	ProvideTimeString,
 } from '../core/get/get.types'
 import {
 	IsAmHrs24,
@@ -39,7 +40,12 @@ import {
 	IsTimeObject,
 } from '../core/is/is.types'
 import { ManualEntryLog } from '../core/ManualEntryLog/ManualEntryLog'
-import { ModifyString12hr, ModifyString24hr, ModifyTimeObject } from '../core/modify/modify.types'
+import {
+	ModifyString12hr,
+	ModifyString24hr,
+	ModifyTimeObject,
+	StraightenTimeObject,
+} from '../core/modify/modify.types'
 import { Regex } from '../core/regex/regex.types'
 import {
 	QuerySelectAll,
@@ -64,6 +70,11 @@ import {
 import { MaxAndMins, Ranges, Segment, SelectionRange } from './index'
 import { TimeObjectKey } from './timeObject'
 
+// You might notice that the documentation for the functions has been duplicated here.
+// If using this Polyfill object, the ts Doc comments wont appear in the editor unless they are filled out here.
+// If using the functions directly by importing, the ts Doc comments wont appear in the editor unless they are directly above the function.
+
+/** All utilities in one package */
 export interface Polyfill {
 	/** Create the element that holds the screen reader text inside it. */
 	a11yCreate: A11yCreate
@@ -101,6 +112,8 @@ export interface Polyfill {
 	/** Utility for converting a date object into either a 12hr string, a 24hr string or a time object. */
 	convertDateObject: ConvertDateObject
 
+	/** If you don't know if a string is 24hr or 12hr format, pass it into this function and it will consistently return in the desired time format that you want. */
+	provideTimeString: ProvideTimeString
 	/** Essentiallly an alias for `convertString12hr(string12hr).toTimeObject()` */
 	getString12hr: GetString12hr
 	/** Essentiallly an alias for `convertString24hr(string24hr).toTimeObject()` */
@@ -120,7 +133,7 @@ export interface Polyfill {
 	/** Retrieve a list of ancestor elements for a specific element. */
 	getAncestorsOf: GetAncestorsOf
 
-	/** Retrieve the current state of the `[shift]` key. */
+	/** Retrieve the current state of the `[shift]` key. (Warning: will fail if bubbling is prevented) */
 	isShiftHeldDown: IsShiftHeldDown
 
 	/** Check if a 24hr hours value is a PM value. */
@@ -150,7 +163,7 @@ export interface Polyfill {
 	/** Check if a value is in a 24hr string format. */
 	isString24hr: IsString24hr
 
-	/** Utility for keeping track of manually entered times. */
+	/** Used for keeping track of Manual key strokes inside a time input */
 	// I don't know why ES Lint thinks ManualEntryLog is undefined
 	// eslint-disable-next-line no-undef
 	ManualEntryLog: typeof ManualEntryLog
@@ -161,7 +174,8 @@ export interface Polyfill {
 	modifyString24hr: ModifyString24hr
 	/** Utility for incrementing or decrementing a time object */
 	modifyTimeObject: ModifyTimeObject
-
+	/** Utility for turning an invalid time object (eg. hrs24 = 13, mode = 'AM') into a valid time object. */
+	straightenTimeObject: StraightenTimeObject
 	/** Regular expressions for checking if time strings match the expected format. */
 	regex: Regex
 
@@ -181,7 +195,7 @@ export interface Polyfill {
 	validateString12hr: ValidateString12hr
 	/** Check if a string is a valid 24hr time string */
 	validateString24hr: ValidateString24hr
-	/** Check if a string is a valid time object */
+	/** Check if an object is a valid time object */
 	validateTimeObject: ValidateTimeObject
 	/** Check if a number is a valid 24hr hours value */
 	validateHours24: ValidateHours24

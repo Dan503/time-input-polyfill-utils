@@ -1,13 +1,16 @@
 {
 	"compilerOptions": {
+		"moduleResolution": "node",
 		"alwaysStrict": true,
 		"noImplicitAny": true,
+		"strict": true,
 		"target": "es5",
-		"module": "commonjs",
-		"declaration": true,
+		"module": "ESNext",
 		"lib": ["es2015", "es2017", "dom"],
+		"declaration": true,
 		"removeComments": false,
-		"outDir": "npm"
+		"outDir": "npm/mjs",
+		"allowUmdGlobalAccess": true
 	},
 	"files": ["./index.ts"],
 	"include": ["./core/**/*.ts", "./common/**/*.ts", "./types/**/*.ts", "./helpers/**/*.ts"],

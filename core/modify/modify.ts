@@ -1,4 +1,4 @@
-import { blankValues } from '../../common/blankValues'
+import { blankValues } from '../../common/staticValues'
 import {
 	GuaranteedMode,
 	Hour12,
@@ -13,14 +13,18 @@ import { convertString12hr, convertString24hr, convertTimeObject } from '../conv
 import { getCursorSegment } from '../get/get'
 import { isAmTimeObject } from '../is/is'
 import { maxAndMins } from '../staticValues'
+import { validateTimeObject } from '../validate/validate'
 import {
 	Action,
 	Integration,
 	ModifyString12hr,
 	ModifyString24hr,
 	ModifyTimeObject,
+	StraightenTimeObject,
+	StraightenTimeObjectParams,
 } from './modify.types'
 
+/** Utility for incrementing or decrementing a 12hr string */
 export const modifyString12hr: ModifyString12hr = (string12hr) => {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	const modeToggle = (preferredModeWhenNull: GuaranteedMode) => ({
@@ -107,6 +111,8 @@ export const modifyString12hr: ModifyString12hr = (string12hr) => {
 		},
 	}
 }
+
+/** Utility for incrementing or decrementing a 24hr string */
 export const modifyString24hr: ModifyString24hr = (string24hr) => {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	const modeToggle = (preferredModeWhenNull: GuaranteedMode) => ({
@@ -176,6 +182,8 @@ export const modifyString24hr: ModifyString24hr = (string24hr) => {
 			),
 	}
 }
+
+/** Utility for incrementing or decrementing a time object */
 export const modifyTimeObject: ModifyTimeObject = (timeObject) => {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	const modeToggle = (preferredModeWhenNull: GuaranteedMode) => ({
@@ -296,7 +304,7 @@ export const modifyTimeObject: ModifyTimeObject = (timeObject) => {
 						am: is12 ? 0 : hrs12,
 						pm: is12 ? 12 : hrs12 + 12,
 					}
-					hrs24Calculation = <Hour24>(targetMode === 'AM' ? hours24hr.am : hours24hr.pm)
+					hrs24Calculation = (targetMode === 'AM' ? hours24hr.am : hours24hr.pm) as Hour24
 				}
 
 				return hrs24Calculation
@@ -308,18 +316,18 @@ export const modifyTimeObject: ModifyTimeObject = (timeObject) => {
 					returnVal.hrs24 = hrs24
 				} else {
 					returnVal.mode = preferredModeWhenNull
-					returnVal.hrs24 = <Hour24>get24HrHours(preferredModeWhenNull)
+					returnVal.hrs24 = get24HrHours(preferredModeWhenNull) as Hour24
 				}
 			} else {
 				returnVal.mode = isAM ? 'PM' : 'AM'
-				returnVal.hrs24 = <Hour24>get24HrHours(isAM ? 'PM' : 'AM')
+				returnVal.hrs24 = get24HrHours(isAM ? 'PM' : 'AM') as Hour24
 			}
 
 			if (hrs12 === null && mode === null) {
 				return returnVal
 			}
 
-			return straightenTimeObject('hrs24', returnVal)
+			return straightenTimeObject({ basedOn: 'hrs24', invalidTimeObject: returnVal })
 		},
 		clear: {
 			hrs24: (): TimeObject => ({ ...timeObject, hrs12: null, hrs24: null }),
@@ -334,7 +342,7 @@ export const modifyTimeObject: ModifyTimeObject = (timeObject) => {
 const nudgeMinutes = (minutes: Minute, direction: 'up' | 'down'): Minute => {
 	const modifier = direction === 'up' ? 1 : -1
 	const newMinutes = direction === 'up' ? 0 : 59
-	return <Minute>(minutes === null ? newMinutes : minutes + modifier)
+	return (minutes === null ? newMinutes : minutes + modifier) as Minute
 }
 
 const nudgeIsolatedTimeObjectHrs = (
@@ -403,7 +411,7 @@ const nudgeTimeObjectHrs = <T extends 'hrs12' | 'hrs24'>({
 	// A function to call if the hrs24 and hrs12 values start off as blank (null)
 	blankCallback: Function
 }): TimeObject => {
-	const hrsType = <T>(integration === 'integrated' ? 'hrs24' : 'hrs12')
+	const hrsType = (integration === 'integrated' ? 'hrs24' : 'hrs12') as T
 	const hrs = timeObject[hrsType]
 	const copiedObject = { ...timeObject }
 
@@ -415,29 +423,40 @@ const nudgeTimeObjectHrs = <T extends 'hrs12' | 'hrs24'>({
 
 	if (typeof hrs === 'number') {
 		if (hrs === limit) {
-			copiedObject[hrsType] = <TimeObject[T]>opposingLimit
+			copiedObject[hrsType] = opposingLimit as TimeObject[T]
 		} else {
-			copiedObject[hrsType] = <TimeObject[T]>(<number>hrs + modifier)
+			copiedObject[hrsType] = ((hrs as number) + modifier) as TimeObject[T]
 		}
-		return straightenTimeObject(hrsType, copiedObject)
+		return straightenTimeObject({ basedOn: hrsType, invalidTimeObject: copiedObject })
 	} else {
-		return blankCallback(straightenTimeObject(hrsType, copiedObject))
+		return blankCallback(
+			straightenTimeObject({ basedOn: hrsType, invalidTimeObject: copiedObject }),
+		)
 	}
 }
 
-const straightenTimeObject = (
-	basedOn: 'hrs12' | 'hrs24',
-	invalidTimeObj: TimeObject,
-): TimeObject => {
-	const { hrs24, hrs12, minutes } = invalidTimeObj
+/** Utility for turning an invalid time object (eg. hrs24 = 13, mode = 'AM') into a valid time object. */
+export const straightenTimeObject: StraightenTimeObject = ({
+	basedOn,
+	invalidTimeObject,
+}: StraightenTimeObjectParams): TimeObject => {
+	const { hrs24, hrs12, minutes } = invalidTimeObject
 
-	const mode = straightenTimeObjectMode(basedOn, invalidTimeObj)
+	const mode = straightenTimeObjectMode(basedOn, invalidTimeObject)
 	const isAM = mode === 'AM'
 
 	const use12hr = basedOn === 'hrs12'
 
+	let isValid = true
+
+	try {
+		validateTimeObject(invalidTimeObject)
+	} catch (e) {
+		isValid = false
+	}
+
 	const get12hrBasedOn24hr = (): Hour12 => {
-		const hr12 = <Hour12 | 0>(hrs24 !== null && hrs24 > 12 ? hrs24 - 12 : hrs24)
+		const hr12 = (hrs24 !== null && hrs24 > 12 ? hrs24 - 12 : hrs24) as Hour12 | 0
 		if (hr12 === 0) {
 			return 12
 		}
@@ -447,7 +466,7 @@ const straightenTimeObject = (
 		const hr24 =
 			mode === null
 				? null
-				: <Hour24 | 24>(!isAM && hrs12 !== null && hrs12 !== 12 ? hrs12 + 12 : hrs12)
+				: ((!isAM && hrs12 !== null && hrs12 !== 12 ? hrs12 + 12 : hrs12) as Hour24 | 24)
 
 		if (hr24 === null) {
 			return null
@@ -458,7 +477,7 @@ const straightenTimeObject = (
 		}
 
 		if (hr24 >= 12 && isAM) {
-			return <Hour24>(hr24 - 12)
+			return (hr24 - 12) as Hour24
 		}
 
 		return hr24
@@ -468,7 +487,7 @@ const straightenTimeObject = (
 		hrs12: use12hr ? hrs12 : get12hrBasedOn24hr(),
 		hrs24: use12hr ? get24hrBasedOn12hr() : hrs24,
 		minutes,
-		mode,
+		mode: invalidTimeObject.mode === null && isValid ? null : mode,
 	}
 
 	return newTimeObject
@@ -476,14 +495,12 @@ const straightenTimeObject = (
 
 const straightenTimeObjectMode = (basedOn: 'hrs12' | 'hrs24', invalidTimeObj: TimeObject): Mode => {
 	const { hrs24, mode } = invalidTimeObj
-	if (mode === null) {
-		return null
-	}
+
 	if (basedOn === 'hrs12') {
-		return mode === null ? 'AM' : mode
+		return mode
 	}
 
-	if (basedOn === 'hrs24' && invalidTimeObj.hrs24 === null && mode !== null) {
+	if (mode && invalidTimeObj.hrs24 === null) {
 		return mode
 	}
 

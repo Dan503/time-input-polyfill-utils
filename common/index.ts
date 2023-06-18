@@ -1,2 +1,2 @@
-export { blankValues } from './blankValues'
-export { default as supportsTime } from './supportsTime'
+export * from './staticValues'
+export * from './supportsTime'

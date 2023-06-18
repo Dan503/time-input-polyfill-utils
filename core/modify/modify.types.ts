@@ -141,3 +141,18 @@ export interface ModifyTimeObject {
 		toggleMode: (preferredModeWhenNull: GuaranteedMode, isIntegrated: boolean) => TimeObject
 	}
 }
+
+export type StraightenTimeObjectParams = {
+	/** Determine if the return time object should align with the `hrs12 (+ mode)` value or the `hrs24` value. */
+	basedOn: 'hrs12' | 'hrs24'
+	/**
+	 * A *potentially* invalid time object that you want to transform into a valid time object.
+	 * It can be valid or invalid in terms of having an `hrs24` value that aligns with the `hrs12 (+ mode)` values.
+	 */
+	invalidTimeObject: TimeObject
+}
+
+export type StraightenTimeObject = ({
+	basedOn,
+	invalidTimeObject: invalidTimeObject,
+}: StraightenTimeObjectParams) => TimeObject

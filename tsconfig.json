@@ -1,9 +1,12 @@
 {
+	"extends": "./tsconfig-base.json",
 	"compilerOptions": {
+		"moduleResolution": "node",
 		"alwaysStrict": true,
+		"noImplicitAny": true,
 		"strict": true,
 		"target": "es5",
-		"module": "ES2015",
+		"module": "ESNext",
 		"lib": ["es2015", "es2017", "dom"],
 		"baseUrl": "../node_modules",
 		"types": ["cypress"]

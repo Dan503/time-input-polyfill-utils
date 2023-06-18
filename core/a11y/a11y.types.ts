@@ -1,5 +1,5 @@
 export interface A11yCreate {
-	(document?: Document): HTMLDivElement
+	(document?: Document): HTMLDivElement | null
 }
 
 export interface A11yUpdate {

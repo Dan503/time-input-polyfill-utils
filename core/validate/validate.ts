@@ -22,12 +22,15 @@ const writeBadValue = (badValue: any): any => {
 	return badValue
 }
 
+/** Check if a string is a valid 12hr time string */
 export const validateString12hr: ValidateString12hr = (string12hr: String12hr) => {
 	if (!isString12hr(string12hr)) {
 		throw new Error(`"${string12hr}" is not a valid 12 hour time, use the format "HH:MM AM/PM"`)
 	}
 	return true
 }
+
+/** Check if a string is a valid 24hr time string */
 export const validateString24hr: ValidateString24hr = (string24hr: String24hr) => {
 	if (!isString24hr(string24hr)) {
 		const extra =
@@ -39,6 +42,8 @@ export const validateString24hr: ValidateString24hr = (string24hr: String24hr) =
 	}
 	return true
 }
+
+/** Check if an object is a valid time object */
 export const validateTimeObject: ValidateTimeObject = (timeObject: TimeObject) => {
 	const { hrs24, hrs12, minutes, mode } = timeObject
 	if (!isTimeObject(timeObject)) {
@@ -114,6 +119,8 @@ export const validateTimeObject: ValidateTimeObject = (timeObject: TimeObject) =
 
 	return true
 }
+
+/** Check if a number is a valid 24hr hours value */
 export const validateHours24: ValidateHours24 = (hrs24: Hour24) => {
 	if (
 		(typeof hrs24 !== 'number' && hrs24 !== '--') ||
