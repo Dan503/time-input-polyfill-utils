@@ -8,7 +8,7 @@
 		"baseUrl": "../node_modules",
 		"moduleResolution": "node",
 		"pretty": true,
-		"resolveJsonModule": true,
+		"resolveJsonModule": false,
 		"skipLibCheck": true,
 		"removeComments": false,
 		"allowSyntheticDefaultImports": true

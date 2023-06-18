@@ -1,2 +1,2 @@
-export * from './blankValues'
+export * from './staticValues'
 export * from './supportsTime'

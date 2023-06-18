@@ -42,7 +42,6 @@
 	"homepage": "https://github.com/Dan503/time-input-polyfill-utils#readme",
 	"devDependencies": {
 		"@cypress/webpack-preprocessor": "^4.1.1",
-		"@rollup/plugin-json": "^4.1.0",
 		"@rollup/plugin-node-resolve": "^15.1.0",
 		"@rollup/plugin-typescript": "^4.0.0",
 		"@typescript-eslint/eslint-plugin": "^2.25.0",

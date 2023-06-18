@@ -1,5 +1,6 @@
 import { MaxAndMins, Ranges, Segment, SelectionRange, TimeObjectKey } from '../types/index'
-import universalValues from '../universalValues.json'
+
+export * from '../common/staticValues'
 
 /** The cursor ranges for each of the segments. */
 export const ranges: Ranges = {
@@ -23,7 +24,3 @@ export const segments: Array<Segment> = ['hrs12', 'minutes', 'mode']
 
 /** An array of each of each the keys in a time object. */
 export const timeObjectKeys: Array<TimeObjectKey> = ['hrs24', 'hrs12', 'minutes', 'mode']
-
-// a11yID needs to be accessed by `@time-input-polyfill/tests` and the cjs/mjs split isn't working :(
-/** The id for the screen reader accessibility block that is generated */
-export const a11yID = universalValues.a11yID

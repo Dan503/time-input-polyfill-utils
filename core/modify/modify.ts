@@ -1,4 +1,4 @@
-import { blankValues } from '../../common/blankValues'
+import { blankValues } from '../../common/staticValues'
 import {
 	GuaranteedMode,
 	Hour12,
